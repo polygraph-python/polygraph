@@ -3,6 +3,8 @@ from collections import OrderedDict
 from graphql.type.definition import GraphQLObjectType
 from marshmallow import Schema, SchemaOpts
 
+from polygraph.utils.trim_docstring import trim_docstring
+
 
 class ObjectTypeOpts(SchemaOpts):
     def __init__(self, meta, **kwargs):
@@ -20,10 +22,12 @@ class ObjectType(Schema):
         super().__init__(only, exclude, prefix, strict,
                          many, context, load_only, dump_only, partial)
         self._name = self.opts.name or self.__class__.__name__
-        self._description = self.opts.description or self.__doc__
+        self._description = self.opts.description or trim_docstring(self.__doc__)
 
     def build_definition(self):
         field_map = OrderedDict()
         for fieldname, field in self.fields.items():
             field_map[fieldname] = field.build_definition()
-        return GraphQLObjectType(name=self._name, fields=field_map)
+        return GraphQLObjectType(name=self._name,
+                                 fields=field_map,
+                                 description=self._description)
