@@ -1,12 +1,14 @@
 from collections import OrderedDict
 
-from graphql.type.definition import GraphQLField, GraphQLNonNull
+from graphql.type.definition import GraphQLField
 from graphql.type.scalars import GraphQLString
 from marshmallow import fields
 
+from polygraph.types.definitions import PolygraphNonNull
+
 
 class String(fields.String):
-    def __init__(self, description, nullable=False, args=None,
+    def __init__(self, description=None, nullable=False, args=None,
                  deprecation_reason=None, **additional_args):
         super().__init__()
         self.description = description
@@ -18,7 +20,7 @@ class String(fields.String):
         if self.nullable:
             base_type = GraphQLString
         else:
-            base_type = GraphQLNonNull(GraphQLString)
+            base_type = PolygraphNonNull(GraphQLString)
         return GraphQLField(
             type=base_type,
             args=self.args,
