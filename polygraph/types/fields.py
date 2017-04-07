@@ -1,16 +1,17 @@
 from collections import OrderedDict
 
 from graphql.type.definition import GraphQLField
-from graphql.type.scalars import GraphQLString
+from graphql.type.scalars import GraphQLString, GraphQLInt
 from marshmallow import fields
 
 from polygraph.types.definitions import PolygraphNonNull
 
 
-class String(fields.String):
-    def __init__(self, description=None, nullable=False, args=None,
+class PolygraphFieldMixin:
+    def __init__(self, type_, description=None, nullable=False, args=None,
                  deprecation_reason=None, **additional_args):
         super().__init__()
+        self.type_ = type_
         self.description = description
         self.nullable = nullable
         self.args = args or OrderedDict()
@@ -18,12 +19,29 @@ class String(fields.String):
 
     def build_definition(self):
         if self.nullable:
-            base_type = GraphQLString
+            base_type = self.type_
         else:
-            base_type = PolygraphNonNull(GraphQLString)
+            base_type = PolygraphNonNull(self.type_)
         return GraphQLField(
             type=base_type,
             args=self.args,
             deprecation_reason=self.deprecation_reason,
             description=self.description,
         )
+
+
+class ScalarFieldMixin(PolygraphFieldMixin):
+    base_type = None
+
+    def __init__(self, description=None, nullable=False, args=None,
+                 deprecation_reason=None, **additional_args):
+        super().__init__(self.base_type, description, nullable,
+                         args, deprecation_reason, **additional_args)
+
+
+class String(ScalarFieldMixin, fields.String):
+    base_type = GraphQLString
+
+
+class Int(ScalarFieldMixin, fields.Int):
+    base_type = GraphQLInt
