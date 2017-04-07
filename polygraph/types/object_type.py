@@ -10,7 +10,7 @@ class ObjectTypeOpts(SchemaOpts):
     def __init__(self, meta, **kwargs):
         SchemaOpts.__init__(self, meta, **kwargs)
         self.name = getattr(meta, 'name', None)
-        self.description = getattr(meta, 'name', None)
+        self.description = getattr(meta, 'description', None)
 
 
 class ObjectType(Schema):
@@ -21,13 +21,13 @@ class ObjectType(Schema):
                  partial=False):
         super().__init__(only, exclude, prefix, strict,
                          many, context, load_only, dump_only, partial)
-        self._name = self.opts.name or self.__class__.__name__
-        self._description = self.opts.description or trim_docstring(self.__doc__)
+        self.name = self.opts.name or self.__class__.__name__
+        self.description = self.opts.description or trim_docstring(self.__doc__)
 
     def build_definition(self):
         field_map = OrderedDict()
         for fieldname, field in self.fields.items():
             field_map[fieldname] = field.build_definition()
-        return GraphQLObjectType(name=self._name,
+        return GraphQLObjectType(name=self.name,
                                  fields=field_map,
-                                 description=self._description)
+                                 description=self.description)
