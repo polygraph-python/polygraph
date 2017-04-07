@@ -18,6 +18,7 @@ setup(
             'flake8',
             'ipython',
             'autopep8',
+            'isort',
         ]
     }
 )
