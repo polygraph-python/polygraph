@@ -42,7 +42,6 @@ class ObjectTypeTest(TestCase):
             expected, actual,
             "\n\n{}\n\n!=\n\n{}".format(pformat(expected, indent=4), pformat(actual, indent=4))
         )
-        # self.assertTrue(graphql_objects_equal(expected, actual))
 
     def test_object_type_meta(self):
         class MetaObject(ObjectType):
