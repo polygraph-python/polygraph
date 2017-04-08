@@ -1,10 +1,9 @@
 from collections import OrderedDict
 
-from graphql.type.definition import GraphQLField
-from graphql.type.scalars import GraphQLString, GraphQLInt
+from graphql.type.scalars import GraphQLInt, GraphQLString
 from marshmallow import fields
 
-from polygraph.types.definitions import PolygraphNonNull
+from polygraph.types.definitions import PolygraphField, PolygraphNonNull
 
 
 class PolygraphFieldMixin:
@@ -22,7 +21,7 @@ class PolygraphFieldMixin:
             base_type = self.type_
         else:
             base_type = PolygraphNonNull(self.type_)
-        return GraphQLField(
+        return PolygraphField(
             type=base_type,
             args=self.args,
             deprecation_reason=self.deprecation_reason,

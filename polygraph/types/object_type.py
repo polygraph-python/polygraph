@@ -1,8 +1,8 @@
 from collections import OrderedDict
 
-from graphql.type.definition import GraphQLObjectType
 from marshmallow import Schema, SchemaOpts
 
+from polygraph.types.definitions import PolygraphObjectType
 from polygraph.utils.trim_docstring import trim_docstring
 
 
@@ -28,6 +28,6 @@ class ObjectType(Schema):
         field_map = OrderedDict()
         for fieldname, field in self.fields.items():
             field_map[fieldname] = field.build_definition()
-        return GraphQLObjectType(name=self.name,
-                                 fields=field_map,
-                                 description=self.description)
+        return PolygraphObjectType(name=self.name,
+                                   fields=field_map,
+                                   description=self.description)
