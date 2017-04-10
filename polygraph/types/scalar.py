@@ -45,20 +45,14 @@ class Float(Scalar, float):
         return float(value)
 
 
-class Boolean(PolygraphType):
+class Boolean(Scalar):
     """
     The Boolean scalar type represents true or false.
     """
     def __new__(cls, value):
         if value is None:
             return None
-        return super().__new__(cls)
-
-    def __init__(self, value):
-        self.value = value
-
-    def __bool__(self):
-        return self.value
+        return bool(value)
 
     @classmethod
     def parse_literal(cls, ast):

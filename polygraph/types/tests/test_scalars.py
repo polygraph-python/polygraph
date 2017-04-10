@@ -43,7 +43,7 @@ class BooleanTest(TestCase):
     def test_class_types(self):
         self.assertTrue(Boolean(True))
         self.assertFalse(Boolean(False))
-        self.assertEqual(Boolean(True)._type.name, "Boolean")
+        self.assertEqual(Boolean._type.name, "Boolean")
 
     def test_none(self):
         self.assertIsNone(Boolean(None))
