@@ -1,5 +1,7 @@
-from polygraph.utils.trim_docstring import trim_docstring
 import types
+
+from polygraph.exceptions import PolygraphValueError
+from polygraph.utils.trim_docstring import trim_docstring
 
 
 class PolygraphTypeMeta(type):
@@ -12,6 +14,9 @@ class PolygraphTypeMeta(type):
         namespace["_type"] = meta
 
         return super(PolygraphTypeMeta, cls).__new__(cls, name, bases, namespace)
+
+    def __str__(self):
+        return str(self._type.name)
 
 
 class PolygraphType(metaclass=PolygraphTypeMeta):
@@ -32,17 +37,6 @@ class PolygraphOutputType:
 
 class Scalar(PolygraphInputType, PolygraphOutputType, PolygraphType):
     """A scalar represents a primitive value in GraphQL"""
-
-
-class Enum(PolygraphInputType, PolygraphOutputType, PolygraphType):
-    """
-    GraphQL Enums are a variant on the Scalar type, which represents one
-    of a finite set of possible values.
-
-    GraphQL Enums are not references for a numeric value, but are unique
-    values in their own right. They serialize as a string: the name of
-    the represented value.
-    """
 
 
 class Interface(PolygraphOutputType, PolygraphType):
@@ -77,12 +71,22 @@ class NonNull(PolygraphType):
     Represents a type for which null is not a valid result.
     """
     def __new__(cls, type_):
-        class NonNullableClass(cls, type_):
-            of_type = type_
+        type_name = type_._type.name
 
-            def __str__(self):
-                return str(self.of_type) + '!'
-        return NonNullableClass
+        class NonNullable:
+            def __new__(cls, value):
+                if value is None:
+                    raise PolygraphValueError("Non-nullable value cannot be None")
+                return super().__new__(cls, value)
+
+        class Type:
+            name = type_name + "!"
+            description = "A non-nullable version of {}".format(type_name)
+
+        name = "NonNull__" + type_name
+        bases = (NonNullable, type_, )
+        attrs = {"Type": Type}
+        return type(name, bases, attrs)
 
 
 class InputObject(PolygraphInputType, PolygraphType):
@@ -91,4 +95,3 @@ class InputObject(PolygraphInputType, PolygraphType):
     are either scalars, enums, or other input objects. This allows
     arguments to accept arbitrarily complex structs.
     """
-
