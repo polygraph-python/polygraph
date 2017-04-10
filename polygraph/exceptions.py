@@ -1,0 +1,2 @@
+class PolygraphValueError(ValueError):
+    pass
