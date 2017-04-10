@@ -1,4 +1,4 @@
-from polygraph.types.basic_type import Scalar
+from polygraph.types.basic_type import PolygraphType, Scalar
 
 
 class Int(Scalar, int):
@@ -45,13 +45,17 @@ class Float(Scalar, float):
         return float(value)
 
 
-class Boolean(Scalar, object):
+class Boolean(PolygraphType):
     """
     The Boolean scalar type represents true or false.
     """
+    def __new__(cls, value):
+        if value is None:
+            return None
+        return super().__new__(cls)
 
     def __init__(self, value):
-        self.value = bool(value)
+        self.value = value
 
     def __bool__(self):
         return self.value

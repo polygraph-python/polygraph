@@ -15,6 +15,10 @@ class IntTest(TestCase):
         self.assertIsInstance(y, Int)
         self.assertEqual(y, 506)
 
+    def test_none(self):
+        z = Int(None)
+        self.assertIsNone(z)
+
 
 class StringTest(TestCase):
     def test_class_types(self):
@@ -22,6 +26,9 @@ class StringTest(TestCase):
         self.assertIsInstance(x, str)
         self.assertIsInstance(x, String)
         self.assertEqual(x, "What is this?")
+
+    def test_none(self):
+        self.assertIsNone(String(None))
 
 
 class FloatTest(TestCase):
@@ -37,3 +44,6 @@ class BooleanTest(TestCase):
         self.assertTrue(Boolean(True))
         self.assertFalse(Boolean(False))
         self.assertEqual(Boolean(True)._type.name, "Boolean")
+
+    def test_none(self):
+        self.assertIsNone(Boolean(None))

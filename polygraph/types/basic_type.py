@@ -37,6 +37,10 @@ class PolygraphOutputType:
 
 class Scalar(PolygraphInputType, PolygraphOutputType, PolygraphType):
     """A scalar represents a primitive value in GraphQL"""
+    def __new__(cls, value, *args, **kwargs):
+        if value is None:
+            return None
+        return super(Scalar, cls).__new__(cls, value, *args, **kwargs)
 
 
 class Interface(PolygraphOutputType, PolygraphType):
