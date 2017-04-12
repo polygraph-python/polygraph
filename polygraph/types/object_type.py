@@ -1,33 +1,21 @@
+import inspect
 from collections import OrderedDict
 
-from marshmallow import Schema, SchemaOpts
-
-from polygraph.types.definitions import PolygraphObjectType
-from polygraph.utils.trim_docstring import trim_docstring
+from polygraph.types.basic_type import PolygraphOutputType, PolygraphType
 
 
-class ObjectTypeOpts(SchemaOpts):
-    def __init__(self, meta, **kwargs):
-        SchemaOpts.__init__(self, meta, **kwargs)
-        self.name = getattr(meta, 'name', None)
-        self.description = getattr(meta, 'description', None)
+class ObjectType(PolygraphOutputType, PolygraphType, dict):
+    """
+    GraphQL Objects represent a list of named fields, each of which yield
+    a value of a specific type.
+    """
 
-
-class ObjectType(Schema):
-    OPTIONS_CLASS = ObjectTypeOpts
-
-    def __init__(self, only=(), exclude=(), prefix='', strict=None,
-                 many=False, context=None, load_only=(), dump_only=(),
-                 partial=False):
-        super().__init__(only, exclude, prefix, strict,
-                         many, context, load_only, dump_only, partial)
-        self.name = self.opts.name or self.__class__.__name__
-        self.description = self.opts.description or trim_docstring(self.__doc__)
-
-    def build_definition(self):
+    @classmethod
+    def get_field_map(cls):
         field_map = OrderedDict()
-        for fieldname, field in self.fields.items():
-            field_map[fieldname] = field.build_definition()
-        return PolygraphObjectType(name=self.name,
-                                   fields=field_map,
-                                   description=self.description)
+        for _, method in inspect.getmembers(cls, predicate=inspect.ismethod):
+            if hasattr(method, '__fieldname__') and hasattr(method, '__field__'):
+                fieldname = method.__fieldname__
+                field = method.__field__
+                field_map[fieldname] = field
+        return field_map

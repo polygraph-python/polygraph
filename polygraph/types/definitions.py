@@ -1,13 +1,10 @@
-from graphql.type.definition import GraphQLNonNull, GraphQLObjectType, GraphQLField
+from graphql.type.definition import (
+    GraphQLField,
+    GraphQLNonNull,
+    GraphQLObjectType,
+)
 
-
-class SlotReprMixin:
-    def __repr__(self):
-        slot_values = ["{}={}".format(slot, getattr(self, slot)) for slot in self.__slots__]
-        return "{}({})".format(
-            self.__class__.__name__,
-            ", ".join(slot_values)
-        )
+from polygraph.utils.attr_repr_mixin import AttrReprMixin
 
 
 class PolygraphNonNull(GraphQLNonNull):
@@ -15,20 +12,13 @@ class PolygraphNonNull(GraphQLNonNull):
         return isinstance(other, GraphQLNonNull) and self.of_type == other.of_type
 
 
-class PolygraphField(SlotReprMixin, GraphQLField):
+class PolygraphField(AttrReprMixin, GraphQLField):
     pass
 
 
-class PolygraphObjectType(GraphQLObjectType):
-    def __repr__(self):
-        return "{}(name={}, fields={}, interfaces={}, is_type_of={}, description={})".format(
-            self.__class__.__name__,
-            repr(self.name),
-            repr(self.fields),
-            repr(self.interfaces),
-            repr(self.is_type_of),
-            repr(self.description),
-        )
+class PolygraphObjectType(AttrReprMixin, GraphQLObjectType):
+    def __repr_attributes__(self):
+        return ["name", "fields", "interfaces", "is_type_of", "description"]
 
     def __eq__(self, other):
         return (
