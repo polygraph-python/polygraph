@@ -59,7 +59,7 @@ class Union(PolygraphOutputType, PolygraphType):
     """
 
 
-class List(PolygraphType):
+class List(PolygraphType, list):
     """
     A GraphQL list is a special collection type which declares the
     type of each item in the List (referred to as the item type of
@@ -70,6 +70,13 @@ class List(PolygraphType):
     """
 
 
+class NonNullable:
+    def __new__(cls, value):
+        if value is None:
+            raise PolygraphValueError("Non-nullable value cannot be None")
+        return super().__new__(cls, value)
+
+
 class NonNull(PolygraphType):
     """
     Represents a type for which null is not a valid result.
@@ -77,11 +84,8 @@ class NonNull(PolygraphType):
     def __new__(cls, type_):
         type_name = type_._type.name
 
-        class NonNullable:
-            def __new__(cls, value):
-                if value is None:
-                    raise PolygraphValueError("Non-nullable value cannot be None")
-                return super().__new__(cls, value)
+        if issubclass(type, NonNullable):
+            raise TypeError("NonNull cannot modify NonNull types")
 
         class Type:
             name = type_name + "!"

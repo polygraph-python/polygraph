@@ -43,3 +43,8 @@ class NonNullTest(TestCase):
         NonNullString = NonNull(String)
         with self.assertRaises(PolygraphValueError):
             NonNullString(None)
+
+    def test_cannot_have_nonnull_of_nonnull(self):
+        NonNullString = NonNull(String)
+        with self.assertRaises(TypeError):
+            NonNull(NonNullString)
