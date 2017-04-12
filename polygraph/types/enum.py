@@ -28,6 +28,9 @@ class EnumValue(PolygraphType):
     def __repr__(self):
         return "EnumValue('{}')".format(self.name)
 
+    class Meta:
+        name = "__EnumValue"
+
 
 class EnumTypeMeta(PolygraphTypeMeta):
     def __new__(cls, name, bases, namespace):
@@ -41,7 +44,7 @@ class EnumTypeMeta(PolygraphTypeMeta):
         return super(EnumTypeMeta, cls).__new__(cls, name, bases, namespace)
 
 
-class EnumType(metaclass=EnumTypeMeta):
+class EnumType(PolygraphInputType, PolygraphOutputType, metaclass=EnumTypeMeta):
     """
     GraphQL Enums are a variant on the Scalar type, which represents one
     of a finite set of possible values.
