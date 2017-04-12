@@ -1,5 +1,6 @@
-from polygraph.types.enum import EnumType
 from unittest import TestCase
+
+from polygraph.types.enum import EnumType
 
 
 class Colours(EnumType):
@@ -22,4 +23,3 @@ class EnumTest(TestCase):
         blue = Colours.BLUE.value
         self.assertEqual(blue.name, "BLUE")
         self.assertEqual(blue.description, "The colour of sloth")
-
