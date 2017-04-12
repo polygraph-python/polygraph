@@ -1,4 +1,3 @@
-import inspect
 from enum import Enum
 
 from polygraph.types.basic_type import (
@@ -7,13 +6,6 @@ from polygraph.types.basic_type import (
     PolygraphType,
     PolygraphTypeMeta,
 )
-
-
-def get_user_attributes(cls):
-    boring = dir(type('dummy', (object,), {}))
-    return [item
-            for item in inspect.getmembers(cls)
-            if item[0] not in boring]
 
 
 class EnumValue(PolygraphType):
@@ -28,7 +20,7 @@ class EnumValue(PolygraphType):
     def __repr__(self):
         return "EnumValue('{}')".format(self.name)
 
-    class Meta:
+    class Type:
         name = "__EnumValue"
 
 
