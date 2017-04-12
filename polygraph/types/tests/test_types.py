@@ -1,7 +1,7 @@
 from unittest import TestCase, skip
 
 from polygraph.exceptions import PolygraphValueError
-from polygraph.types.basic_type import NonNull
+from polygraph.types.basic_type import List, NonNull
 from polygraph.types.scalar import Boolean, Int, String
 from polygraph.utils.trim_docstring import trim_docstring
 
@@ -48,3 +48,21 @@ class NonNullTest(TestCase):
         NonNullString = NonNull(String)
         with self.assertRaises(TypeError):
             NonNull(NonNullString)
+
+
+class ListTest(TestCase):
+
+    def test_scalar_list(self):
+        int_list = List(Int)
+        self.assertEqual(str(int_list), "[Int]")
+        self.assertEqual(int_list([1, 2, 3]), [1, 2, 3])
+        self.assertEqual(int_list(None), None)
+        with self.assertRaises(ValueError):
+            int_list(["a", "b", "c"])
+
+    def test_list_of_nonnulls(self):
+        string_list = List(NonNull(String))
+        self.assertEqual(str(string_list), "[String!]")
+        self.assertEqual(string_list(["a", "b", "c"]), ["a", "b", "c"])
+        with self.assertRaises(PolygraphValueError):
+            string_list(["a", "b", "c", None])

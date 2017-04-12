@@ -59,7 +59,15 @@ class Union(PolygraphOutputType, PolygraphType):
     """
 
 
-class List(PolygraphType, list):
+class Listable(PolygraphType, list):
+    def __new__(cls, value):
+        if value is None:
+            return None
+        ret_val = [cls.of_type(v) for v in value]
+        return super(Listable, cls).__new__(cls, ret_val)
+
+
+class List(PolygraphType):
     """
     A GraphQL list is a special collection type which declares the
     type of each item in the List (referred to as the item type of
@@ -68,6 +76,18 @@ class List(PolygraphType, list):
     List values are serialized as ordered lists, where
     each item in the list is serialized as per the item type.
     """
+
+    def __new__(cls, type_):
+        type_name = type_._type.name
+
+        class Type:
+            name = "[{}]".format(type_name)
+            description = "A list of {}".format(type_name)
+
+        name = "List__" + type_name
+        bases = (Listable, )
+        attrs = {"Type": Type, "of_type": type_}
+        return type(name, bases, attrs)
 
 
 class NonNullable:
