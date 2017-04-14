@@ -1,6 +1,6 @@
 import types
 
-from polygraph.exceptions import PolygraphValueError
+from polygraph.exceptions import PolygraphSchemaError, PolygraphValueError
 from polygraph.utils.trim_docstring import trim_docstring
 
 
@@ -10,6 +10,7 @@ class PolygraphTypeMeta(type):
         meta = namespace.pop("Type", types.SimpleNamespace())
         meta.description = getattr(meta, "description", default_description)
         meta.name = getattr(meta, "name", name) or name
+        meta.possible_types = getattr(meta, "possible_types", None)
 
         namespace["_type"] = meta
 
@@ -17,6 +18,9 @@ class PolygraphTypeMeta(type):
 
     def __str__(self):
         return str(self._type.name)
+
+    def __or__(self, other):
+        return Union(self, other)
 
 
 class PolygraphType(metaclass=PolygraphTypeMeta):
@@ -61,6 +65,34 @@ class Union(PolygraphOutputType, PolygraphType):
     GraphQL Object types, but provides for no guaranteed fields between
     those types.
     """
+    def __new__(cls, *types):
+        types = set(types)
+        assert len(types) >= 2, "Unions must consist of more than 1 type"
+        bad_types = [t for t in types if not issubclass(t, PolygraphType)]
+        if bad_types:
+            message = "All types must be subclasses of PolygraphType. Invalid values: "\
+                      "{}".format(", ".join(bad_types))
+            raise PolygraphSchemaError(message)
+        type_names = [t._type.name for t in types]
+
+        class Unionable(PolygraphType):
+            def __new__(cls, value):
+                if type(value) not in cls._type.possible_types:
+                    valid_types = ", ".join(str(t) for t in cls._type.possible_types)
+                    message = "{} is an invalid value type. "\
+                              "Valid types: {}".format(type(value), valid_types)
+                    raise PolygraphValueError(message)
+                return value
+
+        class Type:
+            name = "|".join(type_names)
+            description = "One of {}".format(", ".join(type_names))
+            possible_types = types
+
+        name = "Union__" + "_".join(type_names)
+        bases = (Unionable, )
+        attrs = {"Type": Type}
+        return type(name, bases, attrs)
 
 
 class Listable(PolygraphType, list):
