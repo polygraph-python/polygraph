@@ -1,4 +1,4 @@
-from polygraph.types.basic_type import PolygraphType, Scalar
+from polygraph.types.basic_type import Scalar
 
 
 class Int(Scalar, int):
