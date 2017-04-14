@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from polygraph.types.scalar import Boolean, Float, Int, String
+from polygraph.types.scalar import ID, Boolean, Float, Int, String
 
 
 class IntTest(TestCase):
@@ -47,3 +47,13 @@ class BooleanTest(TestCase):
 
     def test_none(self):
         self.assertIsNone(Boolean(None))
+
+
+class IDTest(TestCase):
+    def test_id_string(self):
+        x = ID("123-456")
+        self.assertEqual(x, "123-456")
+
+    def test_id_int(self):
+        y = ID(7890)
+        self.assertEqual(y, "7890")
