@@ -10,7 +10,6 @@ setup(
     author_email='hello@weiyen.net',
     license='MIT',
     install_requires=[
-        'marshmallow>=3.0.0b2',
         'graphql-core>=1.0.1',
     ],
     extras_require={
