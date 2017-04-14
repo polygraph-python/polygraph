@@ -40,7 +40,11 @@ class Scalar(PolygraphInputType, PolygraphOutputType, PolygraphType):
     def __new__(cls, value, *args, **kwargs):
         if value is None:
             return None
-        return super(Scalar, cls).__new__(cls, value, *args, **kwargs)
+        try:
+            typed_val = super(Scalar, cls).__new__(cls, value, *args, **kwargs)
+        except ValueError as exc:
+            raise PolygraphValueError(exc)
+        return typed_val
 
 
 class Interface(PolygraphOutputType, PolygraphType):
