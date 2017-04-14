@@ -5,7 +5,7 @@ setup(
     name='polygraph',
     version='0.1.0',
     description='Python library for defining GraphQL schemas',
-    url='https://github.com/yen223/polygraph/',
+    url='https://github.com/polygraph-python/polygraph',
     author='Wei Yen, Lee',
     author_email='hello@weiyen.net',
     license='MIT',
