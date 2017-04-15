@@ -6,7 +6,7 @@ from typing import Tuple
 
 from polygraph.exceptions import PolygraphSchemaError
 from polygraph.types.basic_type import PolygraphInputType, PolygraphOutputType
-from polygraph.types.field import Field
+from polygraph.types.definitions import Field
 from polygraph.utils.trim_docstring import trim_docstring
 
 
