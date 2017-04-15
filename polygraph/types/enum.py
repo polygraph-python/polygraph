@@ -6,6 +6,7 @@ from polygraph.types.basic_type import (
     PolygraphType,
     PolygraphTypeMeta,
 )
+from polygraph.types.definitions import TypeKind
 
 
 class EnumValue(PolygraphType):
@@ -45,3 +46,6 @@ class EnumType(PolygraphInputType, PolygraphOutputType, metaclass=EnumTypeMeta):
     values in their own right. They serialize as a string: the name of
     the represented value.
     """
+
+    class Type:
+        kind = TypeKind.ENUM

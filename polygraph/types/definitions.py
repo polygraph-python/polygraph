@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import List
+from collections import namedtuple
 
 
 class TypeKind(Enum):
@@ -16,24 +16,30 @@ class TypeKind(Enum):
                "required inputs for arguments and input object fields."
 
 
-class Field:
-    def __init__(self, name, return_type, description=None,
-                 arg_types=None, deprecation_reason=None):
-        self.name = name
-        self.return_type = return_type
-        self.description = description
-        self.arg_types = arg_types
-        self.deprecation_reason = deprecation_reason
-        self.is_deprecated = bool(deprecation_reason)
+Field = namedtuple(
+    "Field",
+    [
+        "name",
+        "return_type",
+        "description",
+        "arg_types",
+        "deprecation_reason",
+        "is_deprecated",
+    ]
+)
 
 
-class TypeDefinition:
-    def __init__(self, kind: TypeKind, name: str, fields: List[Field]=None,
-                 interfaces=None, enum_values=None, input_fields=None, of_type=None):
-        self.kind = kind
-        self.name = name
-        self.fields = fields
-        self.interfaces = interfaces
-        self.enum_values = enum_values
-        self.input_fields = input_fields
-        self.of_type = of_type
+TypeDefinition = namedtuple(
+    "TypeDefinition",
+    [
+        "kind",
+        "name",
+        "description",
+        "possible_types",
+        "fields",
+        "interfaces",
+        "enum_values",
+        "input_fields",
+        "of_type",
+    ]
+)

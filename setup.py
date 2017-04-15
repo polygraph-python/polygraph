@@ -18,6 +18,7 @@ setup(
             'ipython',
             'autopep8',
             'isort',
+            'pudb==2017.1.2',
             'twine==1.8.1',
         ]
     }

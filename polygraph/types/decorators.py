@@ -57,6 +57,7 @@ def field(rename_to=None, deprecation_reason=None):
             arg_types=arg_types,
             deprecation_reason=deprecation_reason,
             description=description,
+            is_deprecated=bool(deprecation_reason),
         )
         return wrapper
     return inner
