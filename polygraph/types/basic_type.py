@@ -17,7 +17,7 @@ class PolygraphTypeMeta(type):
                 meta = None
 
         if meta:
-            namespace["_type"] = TypeDefinition(
+            namespace["__type"] = TypeDefinition(
                 kind=getattr(meta, "kind"),
                 name=getattr(meta, "name", name) or name,
                 description=getattr(meta, "description", default_description),
