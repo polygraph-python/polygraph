@@ -1,3 +1,5 @@
+from functools import wraps
+
 from polygraph.exceptions import PolygraphSchemaError, PolygraphValueError
 from polygraph.types.definitions import TypeDefinition, TypeKind
 from polygraph.utils.trim_docstring import trim_docstring
@@ -5,6 +7,22 @@ from polygraph.utils.trim_docstring import trim_docstring
 
 def typedef(type_):
     return type_.__type
+
+
+type_builder_registry = {}
+
+
+def type_builder_cache(method):
+    @wraps(method)
+    def wrapper(cls, *args):
+        unique_args = frozenset(args)
+        if (cls, unique_args) in type_builder_registry:
+            return type_builder_registry[(cls, unique_args)]
+        else:
+            return_val = method(cls, *args)
+            type_builder_registry[(cls, unique_args)] = return_val
+            return return_val
+    return wrapper
 
 
 class PolygraphTypeMeta(type):
@@ -95,6 +113,7 @@ class Union(PolygraphOutputType, PolygraphType):
     GraphQL Object types, but provides for no guaranteed fields between
     those types.
     """
+    @type_builder_cache
     def __new__(cls, *types):
         types = set(types)
         assert len(types) >= 2, "Unions must consist of more than 1 type"
@@ -135,6 +154,7 @@ class List(PolygraphType):
     each item in the list is serialized as per the item type.
     """
 
+    @type_builder_cache
     def __new__(cls, type_):
         type_name = typedef(type_).name
 
@@ -160,6 +180,7 @@ class NonNull(PolygraphType):
     """
     Represents a type for which null is not a valid result.
     """
+    @type_builder_cache
     def __new__(cls, type_):
         type_name = typedef(type_).name
 
