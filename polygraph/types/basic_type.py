@@ -3,14 +3,9 @@ from polygraph.types.definitions import TypeDefinition, TypeKind
 from polygraph.utils.trim_docstring import trim_docstring
 
 
-def typedef(polygraph_type: type):
-    return polygraph_type._type
-
-
 class PolygraphTypeMeta(type):
     def __new__(cls, name, bases, namespace):
         default_description = trim_docstring(namespace.get("__doc__", ""))
-        # import pudb;pudb.set_trace()
         if "Type" in namespace:
             meta = namespace["Type"]
         else:
