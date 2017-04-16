@@ -1,5 +1,6 @@
 from unittest import TestCase
 
+from polygraph.types.basic_type import typedef
 from polygraph.types.scalar import ID, Boolean, Float, Int, String
 
 
@@ -43,7 +44,7 @@ class BooleanTest(TestCase):
     def test_class_types(self):
         self.assertTrue(Boolean(True))
         self.assertFalse(Boolean(False))
-        self.assertEqual(Boolean._type.name, "Boolean")
+        self.assertEqual(typedef(Boolean).name, "Boolean")
 
     def test_none(self):
         self.assertIsNone(Boolean(None))

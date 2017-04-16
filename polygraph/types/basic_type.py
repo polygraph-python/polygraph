@@ -3,6 +3,10 @@ from polygraph.types.definitions import TypeDefinition, TypeKind
 from polygraph.utils.trim_docstring import trim_docstring
 
 
+def typedef(type_):
+    return type_.__type
+
+
 class PolygraphTypeMeta(type):
     def __new__(cls, name, bases, namespace):
         default_description = trim_docstring(namespace.get("__doc__", ""))
@@ -32,7 +36,7 @@ class PolygraphTypeMeta(type):
         return super(PolygraphTypeMeta, cls).__new__(cls, name, bases, namespace)
 
     def __str__(self):
-        return str(self._type.name)
+        return str(typedef(self).name)
 
     def __or__(self, other):
         """
@@ -99,7 +103,7 @@ class Union(PolygraphOutputType, PolygraphType):
             message = "All types must be subclasses of PolygraphType. Invalid values: "\
                       "{}".format(", ".join(bad_types))
             raise PolygraphSchemaError(message)
-        type_names = [t._type.name for t in types]
+        type_names = [typedef(t).name for t in types]
 
         def __new_from_value__(cls, value):
             if not any(isinstance(value, t) for t in types):
@@ -132,7 +136,7 @@ class List(PolygraphType):
     """
 
     def __new__(cls, type_):
-        type_name = type_._type.name
+        type_name = typedef(type_).name
 
         def __new_from_value__(cls, value):
             if value is None:
@@ -157,7 +161,7 @@ class NonNull(PolygraphType):
     Represents a type for which null is not a valid result.
     """
     def __new__(cls, type_):
-        type_name = type_._type.name
+        type_name = typedef(type_).name
 
         if issubclass(type, NonNull):
             raise TypeError("NonNull cannot modify NonNull types")
