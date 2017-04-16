@@ -5,11 +5,13 @@ from polygraph.types.basic_type import Union
 from polygraph.types.scalar import Float, Int, String
 
 
-@skip  # FIXME
+# @skip  # FIXME
 class UnionTypeTest(TestCase):
     def test_commutativity(self):
         self.assertEqual(Union(String, Int), Union(Int, String))
+        self.assertEqual(Union(String, Int, Float), Union(Float, String, Int, String))
 
+    @skip
     def test_associativity(self):
         self.assertEqual(
             Union(Union(String, Int), Float),
@@ -22,6 +24,7 @@ class UnionTypeTest(TestCase):
             Union(String, Int),
         )
 
+    @skip
     def test_pipe_operator_with_more_than_two_types(self):
         self.assertEqual(
             String | Int | Float,
