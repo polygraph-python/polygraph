@@ -1,39 +1,33 @@
-from enum import Enum
-
+from polygraph.exceptions import PolygraphValueError
 from polygraph.types.basic_type import (
     PolygraphInputType,
     PolygraphOutputType,
-    PolygraphType,
     PolygraphTypeMeta,
 )
+from polygraph.types.definitions import TypeKind
 
 
-class EnumValue(PolygraphType):
-    __slots__ = ["name", "description", "is_deprecated", "deprecation_reason"]
+class EnumValue:
+    __slots__ = ["name", "description", "is_deprecated", "deprecation_reason", "parent"]
 
-    def __init__(self, name, description=None, deprecation_reason=None):
+    def __init__(self, name, parent, description=None, deprecation_reason=None):
         self.name = name
         self.description = description
         self.is_deprecated = bool(deprecation_reason)
         self.deprecation_reason = deprecation_reason
+        self.parent = parent
 
     def __repr__(self):
         return "EnumValue('{}')".format(self.name)
 
-    class Type:
-        name = "__EnumValue"
-
 
 class EnumTypeMeta(PolygraphTypeMeta):
     def __new__(cls, name, bases, namespace):
-        enum_values = {}
         for key, desc in namespace.items():
-            if not key.startswith("_"):
+            if not key.startswith("_") and key != "Type":
                 desc = namespace.get(key)
-                enum_values[key] = EnumValue(name=key, description=desc)
-        enum = Enum(name, enum_values)
-        namespace.update(**enum.__members__)
-        return super(EnumTypeMeta, cls).__new__(cls, name, bases, namespace)
+                namespace[key] = EnumValue(name=key, description=desc, parent=name)
+        return super().__new__(cls, name, bases, namespace)
 
 
 class EnumType(PolygraphInputType, PolygraphOutputType, metaclass=EnumTypeMeta):
@@ -45,3 +39,13 @@ class EnumType(PolygraphInputType, PolygraphOutputType, metaclass=EnumTypeMeta):
     values in their own right. They serialize as a string: the name of
     the represented value.
     """
+
+    def __new__(cls, value):
+        if getattr(value, "parent", None) != cls.__name__:
+            raise PolygraphValueError(
+                "Only values belonging to {} are acceptable".format(cls.__name__)
+            )
+        return value
+
+    class Type:
+        kind = TypeKind.ENUM

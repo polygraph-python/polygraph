@@ -1,18 +1,33 @@
-import types
-
 from polygraph.exceptions import PolygraphSchemaError, PolygraphValueError
+from polygraph.types.definitions import TypeDefinition, TypeKind
 from polygraph.utils.trim_docstring import trim_docstring
 
 
 class PolygraphTypeMeta(type):
     def __new__(cls, name, bases, namespace):
         default_description = trim_docstring(namespace.get("__doc__", ""))
-        meta = namespace.pop("Type", types.SimpleNamespace())
-        meta.description = getattr(meta, "description", default_description)
-        meta.name = getattr(meta, "name", name) or name
-        meta.possible_types = getattr(meta, "possible_types", None)
+        if "Type" in namespace:
+            meta = namespace["Type"]
+        else:
+            classes = [cls] + list(bases)
+            classes = [b for b in bases if hasattr(b, "Type")]
+            if classes:
+                meta = classes[0].Type
+            else:
+                meta = None
 
-        namespace["_type"] = meta
+        if meta:
+            namespace["_type"] = TypeDefinition(
+                kind=getattr(meta, "kind"),
+                name=getattr(meta, "name", name) or name,
+                description=getattr(meta, "description", default_description),
+                fields=None,  # FIXME
+                possible_types=getattr(meta, "possible_types", None),
+                interfaces=None,  # FIXME
+                enum_values=None,  # FIXME
+                input_fields=None,  # FIXME
+                of_type=getattr(meta, "of_type", None)
+            )
 
         return super(PolygraphTypeMeta, cls).__new__(cls, name, bases, namespace)
 
@@ -20,6 +35,11 @@ class PolygraphTypeMeta(type):
         return str(self._type.name)
 
     def __or__(self, other):
+        """
+        Allows creation of union types using `|`, e.g.
+
+        > x = String | Int
+        """
         return Union(self, other)
 
 
@@ -50,6 +70,9 @@ class Scalar(PolygraphInputType, PolygraphOutputType, PolygraphType):
             raise PolygraphValueError(exc)
         return typed_val
 
+    class Type:
+        kind = TypeKind.SCALAR
+
 
 class Interface(PolygraphOutputType, PolygraphType):
     """
@@ -57,6 +80,9 @@ class Interface(PolygraphOutputType, PolygraphType):
     arguments. GraphQL objects can then implement an interface, which
     guarantees that they will contain the specified fields.
     """
+
+    class Type:
+        kind = TypeKind.INTERFACE
 
 
 class Union(PolygraphOutputType, PolygraphType):
@@ -75,32 +101,24 @@ class Union(PolygraphOutputType, PolygraphType):
             raise PolygraphSchemaError(message)
         type_names = [t._type.name for t in types]
 
-        class Unionable(PolygraphType):
-            def __new__(cls, value):
-                if type(value) not in cls._type.possible_types:
-                    valid_types = ", ".join(str(t) for t in cls._type.possible_types)
-                    message = "{} is an invalid value type. "\
-                              "Valid types: {}".format(type(value), valid_types)
-                    raise PolygraphValueError(message)
-                return value
+        def __new_from_value__(cls, value):
+            if not any(isinstance(value, t) for t in types):
+                valid_types = ", ".join(type_names)
+                message = "{} is an invalid value type. "\
+                          "Valid types: {}".format(type(value), valid_types)
+                raise PolygraphValueError(message)
+            return value
 
         class Type:
             name = "|".join(type_names)
             description = "One of {}".format(", ".join(type_names))
             possible_types = types
+            kind = TypeKind.UNION
 
         name = "Union__" + "_".join(type_names)
-        bases = (Unionable, )
-        attrs = {"Type": Type}
+        bases = (Union, )
+        attrs = {"__new__": __new_from_value__}
         return type(name, bases, attrs)
-
-
-class Listable(PolygraphType, list):
-    def __new__(cls, value):
-        if value is None:
-            return None
-        ret_val = [cls.of_type(v) for v in value]
-        return super(Listable, cls).__new__(cls, ret_val)
 
 
 class List(PolygraphType):
@@ -116,21 +134,22 @@ class List(PolygraphType):
     def __new__(cls, type_):
         type_name = type_._type.name
 
+        def __new_from_value__(cls, value):
+            if value is None:
+                return None
+            ret_val = [type_(v) for v in value]
+            return list.__new__(cls, ret_val)
+
         class Type:
             name = "[{}]".format(type_name)
             description = "A list of {}".format(type_name)
+            kind = TypeKind.LIST
+            of_type = type_
 
         name = "List__" + type_name
-        bases = (Listable, )
-        attrs = {"Type": Type, "of_type": type_}
+        bases = (List, list)
+        attrs = {"__new__": __new_from_value__, "Type": Type}
         return type(name, bases, attrs)
-
-
-class NonNullable:
-    def __new__(cls, value):
-        if value is None:
-            raise PolygraphValueError("Non-nullable value cannot be None")
-        return super().__new__(cls, value)
 
 
 class NonNull(PolygraphType):
@@ -140,16 +159,23 @@ class NonNull(PolygraphType):
     def __new__(cls, type_):
         type_name = type_._type.name
 
-        if issubclass(type, NonNullable):
+        if issubclass(type, NonNull):
             raise TypeError("NonNull cannot modify NonNull types")
 
         class Type:
             name = type_name + "!"
             description = "A non-nullable version of {}".format(type_name)
+            kind = TypeKind.NON_NULL
+            of_type = type_
+
+        def __new_from_value__(cls, value):
+            if value is None:
+                raise PolygraphValueError("Non-nullable value cannot be None")
+            return type_.__new__(cls, value)
 
         name = "NonNull__" + type_name
-        bases = (NonNullable, type_, )
-        attrs = {"Type": Type}
+        bases = (NonNull, type_, )
+        attrs = {"__new__": __new_from_value__, "Type": Type}
         return type(name, bases, attrs)
 
 
@@ -159,3 +185,6 @@ class InputObject(PolygraphInputType, PolygraphType):
     are either scalars, enums, or other input objects. This allows
     arguments to accept arbitrarily complex structs.
     """
+
+    class Type:
+        kind = TypeKind.INPUT_OBJECT

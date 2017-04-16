@@ -6,7 +6,7 @@ from typing import Tuple
 
 from polygraph.exceptions import PolygraphSchemaError
 from polygraph.types.basic_type import PolygraphInputType, PolygraphOutputType
-from polygraph.types.field import Field
+from polygraph.types.definitions import Field
 from polygraph.utils.trim_docstring import trim_docstring
 
 
@@ -57,6 +57,7 @@ def field(rename_to=None, deprecation_reason=None):
             arg_types=arg_types,
             deprecation_reason=deprecation_reason,
             description=description,
+            is_deprecated=bool(deprecation_reason),
         )
         return wrapper
     return inner
