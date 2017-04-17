@@ -1,8 +1,9 @@
 from unittest import TestCase, skip
 
 from polygraph.exceptions import PolygraphValueError
-from polygraph.types.basic_type import List, NonNull, typedef
+from polygraph.types.api import typedef
 from polygraph.types.scalar import Boolean, Int, String
+from polygraph.types.type_builder import List, NonNull
 from polygraph.utils.trim_docstring import trim_docstring
 
 
