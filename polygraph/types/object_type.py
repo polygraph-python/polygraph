@@ -8,5 +8,8 @@ class ObjectType(PolygraphOutputType, PolygraphType, dict):
     a value of a specific type.
     """
 
+    def __init__(self, root=None):
+        self.root = root
+
     class Type:
         kind = TypeKind.OBJECT
