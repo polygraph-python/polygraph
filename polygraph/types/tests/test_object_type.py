@@ -1,6 +1,7 @@
 from unittest import TestCase
 
 from polygraph.exceptions import PolygraphValueError
+from polygraph.types.api import typedef
 from polygraph.types.decorators import field
 from polygraph.types.object_type import ObjectType
 from polygraph.types.scalar import Int, String
@@ -27,6 +28,15 @@ class HelloWorldObject(ObjectType):
 
 
 class SimpleObjectTypeTest(TestCase):
+    def test_object_type_definition(self):
+        type_info = typedef(HelloWorldObject)
+        self.assertEqual(type_info.name, "HelloWorldObject")
+        self.assertEqual(type_info.description, "This is a test object")
+        self.assertEqual(
+            set([f.name for f in type_info.fields]),
+            set(["greet_world", "greet_you", "bad_resolver"]),
+        )
+
     def test_bare_resolver(self):
         hello_world = HelloWorldObject()
         self.assertEqual(hello_world.greet_world(), String("Hello world!"))

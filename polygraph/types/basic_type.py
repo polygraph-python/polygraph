@@ -4,6 +4,14 @@ from polygraph.types.definitions import TypeDefinition, TypeKind
 from polygraph.utils.trim_docstring import trim_docstring
 
 
+def get_field_list(namespace):
+    return [
+        value.__field__
+        for value in namespace.values()
+        if hasattr(value, "__field__")
+    ]
+
+
 class PolygraphTypeMeta(type):
     def __new__(cls, name, bases, namespace):
         default_description = trim_docstring(namespace.get("__doc__", ""))
@@ -22,7 +30,7 @@ class PolygraphTypeMeta(type):
                 kind=getattr(meta, "kind"),
                 name=getattr(meta, "name", name) or name,
                 description=getattr(meta, "description", default_description),
-                fields=None,  # FIXME
+                fields=get_field_list(namespace),
                 possible_types=getattr(meta, "possible_types", None),
                 interfaces=None,  # FIXME
                 enum_values=None,  # FIXME
