@@ -20,6 +20,11 @@ setup(
             'isort',
             'pudb==2017.1.2',
             'twine==1.8.1',
+            'coverage',
+        ],
+        'test': [
+            'coverage',
+            'coveralls',
         ]
     }
 )
