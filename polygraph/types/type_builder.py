@@ -56,7 +56,7 @@ class Union(PolygraphOutputType, PolygraphType):
 
         name = "Union__" + "_".join(type_names)
         bases = (Union, )
-        attrs = {"__new__": __new_from_value__}
+        attrs = {"__new__": __new_from_value__, "Type": Type}
         return type(name, bases, attrs)
 
 
