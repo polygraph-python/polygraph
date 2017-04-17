@@ -10,6 +10,22 @@ from polygraph.utils.deduplicate import deduplicate
 type_builder_registry = {}
 
 
+def flatten(iterable):
+    for arg in iterable:
+        if issubclass(arg, Union):
+            yield from flatten(arg.__type.possible_types)
+        else:
+            yield arg
+
+
+def deduplicate_union_args(method):
+    @wraps(method)
+    def wrapper(cls, *types):
+        types = list(deduplicate(flatten(types)))
+        return method(cls, *types)
+    return wrapper
+
+
 def type_builder_cache(method):
     @wraps(method)
     def wrapper(cls, *args):
@@ -29,9 +45,10 @@ class Union(PolygraphOutputType, PolygraphType):
     GraphQL Object types, but provides for no guaranteed fields between
     those types.
     """
+
+    @deduplicate_union_args
     @type_builder_cache
     def __new__(cls, *types):
-        types = list(deduplicate(types))
         assert len(types) >= 2, "Unions must consist of more than 1 type"
         bad_types = [t for t in types if not issubclass(t, PolygraphType)]
         if bad_types:
