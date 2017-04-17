@@ -4,6 +4,8 @@ from polygraph.exceptions import PolygraphSchemaError, PolygraphValueError
 from polygraph.types.api import typedef
 from polygraph.types.basic_type import PolygraphOutputType, PolygraphType
 from polygraph.types.definitions import TypeKind
+from polygraph.utils.deduplicate import deduplicate
+
 
 type_builder_registry = {}
 
@@ -29,7 +31,7 @@ class Union(PolygraphOutputType, PolygraphType):
     """
     @type_builder_cache
     def __new__(cls, *types):
-        types = set(types)
+        types = list(deduplicate(types))
         assert len(types) >= 2, "Unions must consist of more than 1 type"
         bad_types = [t for t in types if not issubclass(t, PolygraphType)]
         if bad_types:
