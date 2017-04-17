@@ -1,3 +1,4 @@
+from types import SimpleNamespace
 from unittest import TestCase
 
 from polygraph.exceptions import PolygraphValueError
@@ -51,3 +52,53 @@ class SimpleObjectTypeTest(TestCase):
         hello_world = HelloWorldObject()
         with self.assertRaises(PolygraphValueError):
             hello_world.bad_resolver()
+
+
+class ObjectResolver(ObjectType):
+    @field()
+    def name(self) -> NonNull(String):
+        return self.full_name()
+
+    @field()
+    def age_in_2017(self) -> NonNull(Int):
+        return 2017 - self.root.birthyear
+
+    @field()
+    def always_none(self) -> String:
+        return self.root.address
+
+    @field()
+    def greeting(self) -> HelloWorldObject:
+        return HelloWorldObject()
+
+    def full_name(self):
+        return self.root.first_name + " " + self.root.last_name
+
+
+class ObjectResolverTest(TestCase):
+    def setUp(self):
+        obj = SimpleNamespace(
+            first_name="John",
+            last_name="Smith",
+            birthyear=2000,
+            address=None,
+        )
+        self.object_type = ObjectResolver(obj)
+
+    def test_method_is_not_automatically_field(self):
+        type_info = typedef(self.object_type)
+        fields = set([f.name for f in type_info.fields])
+        self.assertEqual(
+            fields,
+            set(["name", "age_in_2017", "always_none", "greeting"]),
+        )
+        self.assertNotIn("full_name", fields)
+
+    def test_simple_resolver(self):
+        self.assertEqual(self.object_type.name(), "John Smith")
+        self.assertEqual(self.object_type.age_in_2017(), 17)
+        self.assertEqual(self.object_type.always_none(), None)
+
+    def test_resolve_to_object(self):
+        greeting = self.object_type.greeting()
+        self.assertEqual(greeting.greet_world(), "Hello world!")
