@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from polygraph.types.basic_type import typedef
+from polygraph.types.api import typedef
 from polygraph.types.scalar import ID, Boolean, Float, Int, String
 
 
