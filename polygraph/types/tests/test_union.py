@@ -1,17 +1,23 @@
-from unittest import TestCase, skip
+from unittest import TestCase
 
 from polygraph.exceptions import PolygraphValueError
 from polygraph.types.scalar import Float, Int, String
+from polygraph.types.tests.helper import Animal, Person
 from polygraph.types.type_builder import Union
 
 
 class UnionTypeTest(TestCase):
 
+    def test_square_bracket_notation(self):
+        self.assertEqual(
+            Union(Person, Animal),
+            Union[Person, Animal],
+        )
+
     def test_commutativity(self):
         self.assertEqual(Union(String, Int), Union(Int, String))
         self.assertEqual(Union(String, Int, Float), Union(Float, String, Int))
 
-    @skip
     def test_associativity(self):
         self.assertEqual(
             Union(Union(String, Int), Float),

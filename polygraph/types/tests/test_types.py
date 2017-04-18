@@ -50,6 +50,9 @@ class NonNullTest(TestCase):
         with self.assertRaises(TypeError):
             NonNull(NonNullString)
 
+    def test_square_bracket_notation(self):
+        self.assertEqual(NonNull(String), NonNull[String])
+
 
 class ListTest(TestCase):
 
@@ -67,3 +70,7 @@ class ListTest(TestCase):
         self.assertEqual(string_list(["a", "b", "c"]), ["a", "b", "c"])
         with self.assertRaises(PolygraphValueError):
             string_list(["a", "b", "c", None])
+
+    def test_square_bracket_notation(self):
+        self.assertEqual(List(Int), List[Int])
+
