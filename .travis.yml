@@ -16,6 +16,7 @@ install:
   - pip install .[test]
 
 script:
+  - isort --diff --check-only -q
   - coverage run -m unittest
 
 after_success:

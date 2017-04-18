@@ -24,6 +24,7 @@ setup(
             'virtualenvwrapper',
         ],
         'test': [
+            'isort',
             'coverage',
             'coveralls',
         ]
