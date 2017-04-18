@@ -2,7 +2,11 @@ from functools import wraps
 
 from polygraph.exceptions import PolygraphSchemaError, PolygraphValueError
 from polygraph.types.api import typedef
-from polygraph.types.basic_type import PolygraphOutputType, PolygraphType
+from polygraph.types.basic_type import (
+    PolygraphOutputType,
+    PolygraphType,
+    PolygraphTypeMeta,
+)
 from polygraph.types.definitions import TypeKind
 from polygraph.utils.deduplicate import deduplicate
 
@@ -39,7 +43,15 @@ def type_builder_cache(method):
     return wrapper
 
 
-class Union(PolygraphOutputType, PolygraphType):
+class TypeBuilderMeta(PolygraphTypeMeta):
+    def __getitem__(self, value):
+        try:
+            return self.__new__(self, *value)
+        except TypeError:
+            return self.__new__(self, value)
+
+
+class Union(PolygraphOutputType, PolygraphType, metaclass=TypeBuilderMeta):
     """
     GraphQL Unions represent an object that could be one of a list of
     GraphQL Object types, but provides for no guaranteed fields between
@@ -77,7 +89,7 @@ class Union(PolygraphOutputType, PolygraphType):
         return type(name, bases, attrs)
 
 
-class List(PolygraphOutputType, PolygraphType):
+class List(PolygraphOutputType, PolygraphType, metaclass=TypeBuilderMeta):
     """
     A GraphQL list is a special collection type which declares the
     type of each item in the List (referred to as the item type of
@@ -109,7 +121,7 @@ class List(PolygraphOutputType, PolygraphType):
         return type(name, bases, attrs)
 
 
-class NonNull(PolygraphType):
+class NonNull(PolygraphType, metaclass=TypeBuilderMeta):
     """
     Represents a type for which null is not a valid result.
     """
