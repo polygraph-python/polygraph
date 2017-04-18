@@ -1,8 +1,8 @@
 from unittest import TestCase, skip
 
 from polygraph.exceptions import PolygraphValueError
-from polygraph.types.type_builder import Union
 from polygraph.types.scalar import Float, Int, String
+from polygraph.types.type_builder import Union
 
 
 class UnionTypeTest(TestCase):

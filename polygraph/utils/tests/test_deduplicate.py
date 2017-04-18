@@ -1,5 +1,6 @@
-from polygraph.utils.deduplicate import deduplicate
 from unittest import TestCase
+
+from polygraph.utils.deduplicate import deduplicate
 
 
 class DeduplicateTest(TestCase):

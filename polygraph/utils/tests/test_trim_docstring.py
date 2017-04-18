@@ -1,5 +1,6 @@
-from ..trim_docstring import trim_docstring
 from unittest import TestCase
+
+from ..trim_docstring import trim_docstring
 
 
 class WellDocumentedObject(object):
