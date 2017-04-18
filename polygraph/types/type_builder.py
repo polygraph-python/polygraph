@@ -77,7 +77,7 @@ class Union(PolygraphOutputType, PolygraphType):
         return type(name, bases, attrs)
 
 
-class List(PolygraphType):
+class List(PolygraphOutputType, PolygraphType):
     """
     A GraphQL list is a special collection type which declares the
     type of each item in the List (referred to as the item type of
