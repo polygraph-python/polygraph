@@ -1,6 +1,7 @@
 from unittest import TestCase
 
 from polygraph.exceptions import PolygraphValueError
+from polygraph.types.api import typedef
 from polygraph.types.enum import EnumType
 
 
@@ -8,6 +9,12 @@ class Colours(EnumType):
     RED = "The colour of fury"
     GREEN = "The colour of envy"
     BLUE = "The colour of sloth"
+
+
+class Shapes(EnumType):
+    RECTANGLE = "A quadrangle"
+    SQUARE = "Also a quadrangle"
+    RHOMBUS = "Yet another quadrangle"
 
 
 class EnumTest(TestCase):
@@ -29,3 +36,14 @@ class EnumTest(TestCase):
         self.assertEqual(Colours(Colours.RED), Colours.RED)
         with self.assertRaises(PolygraphValueError):
             Colours("RED")
+
+    def test_enum_values_dont_mix(self):
+        with self.assertRaises(PolygraphValueError):
+            Colours(Shapes.RECTANGLE)
+
+        with self.assertRaises(PolygraphValueError):
+            Shapes(Colours.BLUE)
+
+    def test_enum_type(self):
+        colour_type = typedef(Colours)
+        self.assertEqual(len(colour_type.enum_values), 3)

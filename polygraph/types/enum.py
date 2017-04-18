@@ -4,21 +4,7 @@ from polygraph.types.basic_type import (
     PolygraphOutputType,
     PolygraphTypeMeta,
 )
-from polygraph.types.definitions import TypeKind
-
-
-class EnumValue:
-    __slots__ = ["name", "description", "is_deprecated", "deprecation_reason", "parent"]
-
-    def __init__(self, name, parent, description=None, deprecation_reason=None):
-        self.name = name
-        self.description = description
-        self.is_deprecated = bool(deprecation_reason)
-        self.deprecation_reason = deprecation_reason
-        self.parent = parent
-
-    def __repr__(self):
-        return "EnumValue('{}')".format(self.name)
+from polygraph.types.definitions import EnumValue, TypeKind
 
 
 class EnumTypeMeta(PolygraphTypeMeta):
