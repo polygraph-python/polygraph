@@ -73,4 +73,3 @@ class ListTest(TestCase):
 
     def test_square_bracket_notation(self):
         self.assertEqual(List(Int), List[Int])
-
