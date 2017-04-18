@@ -25,6 +25,7 @@ setup(
         ],
         'test': [
             'isort',
+            'flake8',
             'coverage',
             'coveralls',
         ]
