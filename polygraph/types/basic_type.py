@@ -1,6 +1,6 @@
 from polygraph.exceptions import PolygraphValueError
 from polygraph.types.api import typedef
-from polygraph.types.definitions import TypeDefinition, TypeKind
+from polygraph.types.definitions import EnumValue, TypeDefinition, TypeKind
 from polygraph.utils.trim_docstring import trim_docstring
 
 
@@ -9,6 +9,12 @@ def get_field_list(namespace):
         value.__field__
         for value in namespace.values()
         if hasattr(value, "__field__")
+    ]
+
+
+def get_enum_value_list(namespace):
+    return [
+        value for value in namespace.values() if isinstance(value, EnumValue)
     ]
 
 
@@ -33,7 +39,7 @@ class PolygraphTypeMeta(type):
                 fields=get_field_list(namespace),
                 possible_types=getattr(meta, "possible_types", None),
                 interfaces=None,  # FIXME
-                enum_values=None,  # FIXME
+                enum_values=get_enum_value_list(namespace),
                 input_fields=None,  # FIXME
                 of_type=getattr(meta, "of_type", None)
             )
