@@ -1,6 +1,7 @@
 from unittest import TestCase
 
 from polygraph.exceptions import PolygraphValueError
+from polygraph.types.api import typedef
 from polygraph.types.enum import EnumType
 
 
@@ -42,3 +43,7 @@ class EnumTest(TestCase):
 
         with self.assertRaises(PolygraphValueError):
             Shapes(Colours.BLUE)
+
+    def test_enum_type(self):
+        colour_type = typedef(Colours)
+        self.assertEqual(len(colour_type.enum_values), 3)
