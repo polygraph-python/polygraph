@@ -1,5 +1,5 @@
-from enum import Enum
 from collections import namedtuple
+from enum import Enum
 
 
 class TypeKind(Enum):

@@ -16,6 +16,8 @@ install:
   - pip install .[test]
 
 script:
+  - isort --diff --check-only -q
+  - flake8 .
   - coverage run -m unittest
 
 after_success:
