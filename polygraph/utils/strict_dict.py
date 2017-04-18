@@ -9,4 +9,3 @@ class StrictDict(dict):
                 "Attempting to set {} to a different value {}".format(key, item)
             )
         return super().__setitem__(key, item)
-
