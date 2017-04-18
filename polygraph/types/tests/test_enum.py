@@ -10,6 +10,12 @@ class Colours(EnumType):
     BLUE = "The colour of sloth"
 
 
+class Shapes(EnumType):
+    RECTANGLE = "A quadrangle"
+    SQUARE = "Also a quadrangle"
+    RHOMBUS = "Yet another quadrangle"
+
+
 class EnumTest(TestCase):
 
     def test_simple_enum(self):
@@ -29,3 +35,10 @@ class EnumTest(TestCase):
         self.assertEqual(Colours(Colours.RED), Colours.RED)
         with self.assertRaises(PolygraphValueError):
             Colours("RED")
+
+    def test_enum_values_dont_mix(self):
+        with self.assertRaises(PolygraphValueError):
+            Colours(Shapes.RECTANGLE)
+
+        with self.assertRaises(PolygraphValueError):
+            Shapes(Colours.BLUE)
