@@ -3,8 +3,8 @@ from unittest import TestCase, skip
 from polygraph.exceptions import PolygraphValueError
 from polygraph.types.api import typedef
 from polygraph.types.list import List
+from polygraph.types.nonnull import NonNull
 from polygraph.types.scalar import Boolean, Int, String
-from polygraph.types.type_builder import NonNull
 from polygraph.utils.trim_docstring import trim_docstring
 
 
