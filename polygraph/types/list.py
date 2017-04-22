@@ -1,8 +1,7 @@
-
-from polygraph.types.basic_type import PolygraphOutputType, PolygraphType
-from polygraph.types.type_builder import TypeBuilderMeta, type_builder_cache
-from polygraph.types.definitions import TypeKind
 from polygraph.types.api import typedef
+from polygraph.types.basic_type import PolygraphOutputType, PolygraphType
+from polygraph.types.definitions import TypeKind
+from polygraph.types.type_builder import TypeBuilderMeta, type_builder_cache
 
 
 class List(PolygraphOutputType, PolygraphType, metaclass=TypeBuilderMeta):
@@ -35,4 +34,3 @@ class List(PolygraphOutputType, PolygraphType, metaclass=TypeBuilderMeta):
         bases = (List, list)
         attrs = {"__new__": __new_from_value__, "Type": Type}
         return type(name, bases, attrs)
-

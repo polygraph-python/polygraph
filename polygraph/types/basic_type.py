@@ -99,5 +99,3 @@ class Interface(PolygraphOutputType, PolygraphType):
 
     class Type:
         kind = TypeKind.INTERFACE
-
-
