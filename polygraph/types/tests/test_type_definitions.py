@@ -1,8 +1,9 @@
 from unittest import TestCase
 
 from polygraph.types.api import typedef
+from polygraph.types.list import List
 from polygraph.types.scalar import Float, Int, String
-from polygraph.types.type_builder import List, NonNull
+from polygraph.types.type_builder import NonNull
 from polygraph.types.union import Union
 
 
