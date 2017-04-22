@@ -55,7 +55,7 @@ class PolygraphTypeMeta(type):
 
         > x = String | Int
         """
-        from polygraph.types.type_builder import Union
+        from polygraph.types.union import Union
         return Union(self, other)
 
 
@@ -99,14 +99,3 @@ class Interface(PolygraphOutputType, PolygraphType):
 
     class Type:
         kind = TypeKind.INTERFACE
-
-
-class InputObject(PolygraphInputType, PolygraphType):
-    """
-    An Input Object defines a set of input fields; the input fields
-    are either scalars, enums, or other input objects. This allows
-    arguments to accept arbitrarily complex structs.
-    """
-
-    class Type:
-        kind = TypeKind.INPUT_OBJECT

@@ -4,9 +4,9 @@ from unittest import TestCase
 from polygraph.exceptions import PolygraphValueError
 from polygraph.types.api import typedef
 from polygraph.types.decorators import field
+from polygraph.types.nonnull import NonNull
 from polygraph.types.object_type import ObjectType
 from polygraph.types.scalar import Int, String
-from polygraph.types.type_builder import NonNull
 
 
 class HelloWorldObject(ObjectType):

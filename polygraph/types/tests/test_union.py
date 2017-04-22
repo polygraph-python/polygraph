@@ -3,7 +3,7 @@ from unittest import TestCase
 from polygraph.exceptions import PolygraphValueError
 from polygraph.types.scalar import Float, Int, String
 from polygraph.types.tests.helper import Animal, Person
-from polygraph.types.type_builder import Union
+from polygraph.types.union import Union
 
 
 class UnionTypeTest(TestCase):
