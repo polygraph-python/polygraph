@@ -4,7 +4,8 @@ from polygraph.types.decorators import field
 from polygraph.types.object_type import ObjectType
 from polygraph.types.scalar import ID, Boolean, Float, Int, String
 from polygraph.types.schema import Schema
-from polygraph.types.type_builder import List, NonNull, Union
+from polygraph.types.type_builder import List, NonNull
+from polygraph.types.union import Union
 
 
 class Person(ObjectType):
