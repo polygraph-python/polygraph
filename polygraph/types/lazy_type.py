@@ -3,6 +3,10 @@ import inspect
 
 
 class LazyType:
+    """
+    Defines a type that is lazily imported at runtime. Used mainly to resolve
+    circular definitions (e.g. object fields whose return type is the object itself)
+    """
     def __init__(self, class_name, module_name=None):
         self.class_name = class_name
         if not module_name:
