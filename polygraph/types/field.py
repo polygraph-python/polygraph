@@ -71,7 +71,6 @@ def _obtain_field_types(method) -> Tuple[dict, PolygraphOutputType]:
     Returns a (arg_type_map, return_type) tuple, where arg_type_map is a
     map between arguments and their types; and return_type is the field type
     """
-    validate_method_annotations(method)
     special_args = ["self", "cls"]
     sig = signature(method)
     parameters = [p for p in sig.parameters.values() if p.name not in special_args]
@@ -82,6 +81,7 @@ def _obtain_field_types(method) -> Tuple[dict, PolygraphOutputType]:
 
 def field(name=None, deprecation_reason=None):
     def inner(method):
+        validate_method_annotations(method)
         arg_types, return_type = _obtain_field_types(method)
 
         @wraps(method)
