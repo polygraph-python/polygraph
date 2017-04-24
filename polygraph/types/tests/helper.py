@@ -1,4 +1,4 @@
-from polygraph.types.decorators import field
+from polygraph.types.field import field
 from polygraph.types.object_type import ObjectType
 from polygraph.types.scalar import Int, String
 

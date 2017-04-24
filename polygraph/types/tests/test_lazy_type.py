@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from polygraph.types.decorators import field
+from polygraph.types.field import field
 from polygraph.types.lazy_type import LazyType
 from polygraph.types.object_type import ObjectType
 from polygraph.types.tests.helper import Person

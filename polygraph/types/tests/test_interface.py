@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 from polygraph.exceptions import PolygraphSchemaError
-from polygraph.types.decorators import field
+from polygraph.types.field import field
 from polygraph.types.interface import Interface, validate_interface_schema
 from polygraph.types.scalar import String
 
@@ -31,7 +31,7 @@ class InterfaceValidationTest(TestCase):
             def name(self) -> String:
                 pass  # pragma: no cover
 
-            @field(rename_to="name")
+            @field(name="name")
             def other_name(self) -> String:
                 pass  # pragma: no cover
 

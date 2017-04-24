@@ -5,11 +5,8 @@ from polygraph.utils.trim_docstring import trim_docstring
 
 
 def get_field_list(namespace):
-    return [
-        value.__field__
-        for value in namespace.values()
-        if hasattr(value, "__field__")
-    ]
+    from polygraph.types.field import Field
+    return [value for value in namespace.values() if isinstance(value, Field)]
 
 
 def get_enum_value_list(namespace):

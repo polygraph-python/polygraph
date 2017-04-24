@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from polygraph.types.decorators import field
+from polygraph.types.field import field
 from polygraph.types.list import List
 from polygraph.types.nonnull import NonNull
 from polygraph.types.object_type import ObjectType
