@@ -1,6 +1,6 @@
 from polygraph.exceptions import PolygraphSchemaError
 from polygraph.types.basic_type import PolygraphOutputType, PolygraphType
-from polygraph.types.definitions import Field
+from polygraph.types.field import Field
 
 
 class Interface(PolygraphOutputType, PolygraphType):
@@ -8,11 +8,7 @@ class Interface(PolygraphOutputType, PolygraphType):
 
 
 def validate_interface_schema(interface_class):
-    attributes = (
-        getattr(interface_class, attr).__field__
-        for attr in dir(interface_class)
-        if hasattr(getattr(interface_class, attr), "__field__")
-    )
+    attributes = (getattr(interface_class, attr) for attr in dir(interface_class))
     fields = [attr for attr in attributes if isinstance(attr, Field)]
 
     if len(fields) < 1:
