@@ -4,8 +4,8 @@ from inspect import signature
 
 from typing import Tuple
 
-from polygraph.types.api import get_type_class
 from polygraph.exceptions import PolygraphSchemaError
+from polygraph.types.api import get_type_class
 from polygraph.types.basic_type import PolygraphInputType, PolygraphOutputType
 from polygraph.utils.trim_docstring import trim_docstring
 
