@@ -80,7 +80,7 @@ def _obtain_field_types(method) -> Tuple[dict, PolygraphOutputType]:
     return arg_types, return_type
 
 
-def field(rename_to=None, deprecation_reason=None):
+def field(name=None, deprecation_reason=None):
     def inner(method):
         arg_types, return_type = _obtain_field_types(method)
 
@@ -91,9 +91,9 @@ def field(rename_to=None, deprecation_reason=None):
             return return_type(return_val)
 
         description = trim_docstring(method.__doc__)
-        name = rename_to or method.__name__
+        field_name = name or method.__name__
         field = Field(
-            name=name,
+            name=field_name,
             return_type=return_type,
             arg_types=arg_types,
             deprecation_reason=deprecation_reason,

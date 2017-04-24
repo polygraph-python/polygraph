@@ -31,7 +31,7 @@ class InterfaceValidationTest(TestCase):
             def name(self) -> String:
                 pass  # pragma: no cover
 
-            @field(rename_to="name")
+            @field(name="name")
             def other_name(self) -> String:
                 pass  # pragma: no cover
 
