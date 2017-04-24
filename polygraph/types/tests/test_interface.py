@@ -12,7 +12,7 @@ class InterfaceValidationTest(TestCase):
         class Humanoid(Interface):
             @field()
             def name(self) -> String:
-                pass
+                pass  # pragma: no cover
 
         self.assertIsNone(validate_interface_schema(Humanoid))
 
@@ -29,11 +29,11 @@ class InterfaceValidationTest(TestCase):
         class Duplicate(Interface):
             @field()
             def name(self) -> String:
-                pass
+                pass  # pragma: no cover
 
             @field(rename_to="name")
             def other_name(self) -> String:
-                pass
+                pass  # pragma: no cover
 
         with self.assertRaises(PolygraphSchemaError):
             validate_interface_schema(Duplicate)
@@ -43,7 +43,7 @@ class InterfaceValidationTest(TestCase):
         class DunderscoredField(Interface):
             @field()
             def __name(self) -> String:
-                pass
+                pass  # pragma: no cover
 
         with self.assertRaises(PolygraphSchemaError):
             validate_interface_schema(DunderscoredField)
