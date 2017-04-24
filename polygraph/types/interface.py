@@ -1,6 +1,6 @@
+from polygraph.exceptions import PolygraphSchemaError
 from polygraph.types.basic_type import PolygraphOutputType, PolygraphType
 from polygraph.types.definitions import Field
-from polygraph.exceptions import PolygraphSchemaError
 
 
 class Interface(PolygraphOutputType, PolygraphType):
@@ -24,5 +24,3 @@ def validate_interface_schema(interface_class):
 
     if any(name.startswith("__") for name in names):
         raise PolygraphSchemaError("Interface field names cannot start with '__'")
-
-
