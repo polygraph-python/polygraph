@@ -65,6 +65,11 @@ def validate_method_annotations(method):
             "{}: Fields {} must be annotated".format(method_name, field_names)
         )
 
+    if sig.return_annotation == sig.empty:
+        raise PolygraphSchemaError(
+            "{}: Return type must be annotated".format(method_name)
+        )
+
 
 def _obtain_field_types(method) -> Tuple[dict, PolygraphOutputType]:
     """
