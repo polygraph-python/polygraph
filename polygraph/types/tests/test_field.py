@@ -52,3 +52,21 @@ class FieldTest(TestCase):
 
         with self.assertRaises(PolygraphSchemaError):
             validate_field_types(Test.bad_return_type)
+
+    def test_validate_method_annotations(self):
+        def unannotated_argument(self, arg1) -> String:
+            pass
+
+        def unannotated_return_type(self, arg1: String, arg2: Int):
+            pass
+
+        def fully_annotated_method(self, arg1: String, arg2: Int) -> lazy_animal:
+            pass
+
+        with self.assertRaises(PolygraphSchemaError):
+            validate_method_annotations(unannotated_argument)
+
+        with self.assertRaises(PolygraphSchemaError):
+            validate_method_annotations(unannotated_return_type)
+
+        self.assertIsNone(validate_method_annotations(fully_annotated_method))
