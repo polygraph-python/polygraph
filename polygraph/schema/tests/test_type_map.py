@@ -1,12 +1,18 @@
 from unittest import TestCase
 
-from polygraph.types.field import field
-from polygraph.types.list import List
-from polygraph.types.nonnull import NonNull
-from polygraph.types.object_type import ObjectType
-from polygraph.types.scalar import ID, Boolean, Float, Int, String
-from polygraph.types.schema import Schema
-from polygraph.types.union import Union
+from polygraph.schema.schema import Schema
+from polygraph.types import (
+    ID,
+    Boolean,
+    Float,
+    Int,
+    List,
+    NonNull,
+    ObjectType,
+    String,
+    Union,
+    field,
+)
 
 
 class Person(ObjectType):
