@@ -9,10 +9,10 @@ from polygraph.types.definitions import EnumValue, TypeKind
 
 class EnumTypeMeta(PolygraphTypeMeta):
     def __new__(cls, name, bases, namespace):
-        for key, desc in namespace.items():
-            if not key.startswith("_") and key != "Type":
-                desc = namespace.get(key)
-                namespace[key] = EnumValue(name=key, description=desc, parent=name)
+        for key, value in namespace.items():
+            if type(value) == EnumValue:
+                value.name = value.name or key
+                value.parent = name
         return super().__new__(cls, name, bases, namespace)
 
 
