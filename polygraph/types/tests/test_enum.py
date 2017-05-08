@@ -2,19 +2,19 @@ from unittest import TestCase
 
 from polygraph.exceptions import PolygraphValueError
 from polygraph.types.api import typedef
-from polygraph.types.enum import EnumType
+from polygraph.types.enum import EnumType, EnumValue
 
 
 class Colours(EnumType):
-    RED = "The colour of fury"
-    GREEN = "The colour of envy"
-    BLUE = "The colour of sloth"
+    RED = EnumValue("The colour of fury")
+    GREEN = EnumValue("The colour of envy")
+    BLUE = EnumValue("The colour of sloth")
 
 
 class Shapes(EnumType):
-    RECTANGLE = "A quadrangle"
-    SQUARE = "Also a quadrangle"
-    RHOMBUS = "Yet another quadrangle"
+    RECTANGLE = EnumValue("A quadrangle")
+    SQUARE = EnumValue("Also a quadrangle")
+    RHOMBUS = EnumValue("Yet another quadrangle")
 
 
 class EnumTest(TestCase):
@@ -47,3 +47,11 @@ class EnumTest(TestCase):
     def test_enum_type(self):
         colour_type = typedef(Colours)
         self.assertEqual(len(colour_type.enum_values), 3)
+
+    def test_enum_value_name(self):
+        class NamedValue(EnumType):
+            ORIGINAL = EnumValue("Name is ORIGINAL")
+            REPLACED = EnumValue("Name is NOT_REPLACED", name="NOT_REPLACED")
+
+        self.assertEqual(NamedValue.ORIGINAL.name, "ORIGINAL")
+        self.assertEqual(NamedValue.REPLACED.name, "NOT_REPLACED")
