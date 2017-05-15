@@ -1,14 +1,11 @@
 from unittest import TestCase
 
 from polygraph.exceptions import PolygraphTypeError
-from polygraph.types.input_object import (
-    InputObject,
-    InputValue,
-)
+from polygraph.type_validators import validate_input_object
+from polygraph.types.input_object import InputObject, InputValue
 from polygraph.types.lazy_type import LazyType
 from polygraph.types.scalar import String
 from polygraph.types.tests.helper import Person
-from polygraph.type_validators import validate_input_object
 
 
 class SampleInput(InputObject):

@@ -1,7 +1,7 @@
 from polygraph.exceptions import PolygraphTypeError
 from polygraph.types import InputValue
-from polygraph.types.basic_type import PolygraphInputType
 from polygraph.types.api import get_type_class
+from polygraph.types.basic_type import PolygraphInputType
 
 
 def validate_input_object(input_object_class):
