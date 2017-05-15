@@ -1,6 +1,6 @@
-from .enum import EnumType
+from .enum import EnumType, EnumValue
 from .field import field
-from .input_object import InputObject
+from .input_object import InputObject, InputValue
 from .interface import Interface
 from .lazy_type import LazyType
 from .list import List
@@ -12,10 +12,12 @@ from .union import Union
 __all__ = [
     "Boolean",
     "EnumType",
+    "EnumValue",
     "field",
     "Float",
     "ID",
     "InputObject",
+    "InputValue",
     "Int",
     "Interface",
     "LazyType",
