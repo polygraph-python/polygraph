@@ -1,5 +1,3 @@
-from polygraph.exceptions import PolygraphSchemaError
-from polygraph.types.api import get_type_class
 from polygraph.types.basic_type import PolygraphInputType, PolygraphType
 from polygraph.types.definitions import TypeKind
 
