@@ -1,6 +1,4 @@
-from polygraph.types.api import typedef
 from polygraph.types.basic_type import PolygraphOutputType, PolygraphType
-from polygraph.types.definitions import TypeKind
 from polygraph.types.type_builder import TypeBuilderMeta, type_builder_cache
 
 
@@ -16,7 +14,7 @@ class List(PolygraphOutputType, PolygraphType, metaclass=TypeBuilderMeta):
 
     @type_builder_cache
     def __new__(cls, type_):
-        type_name = typedef(type_).name
+        type_name = type_.__name__
 
         def __new_from_value__(cls, value):
             if value is None:
@@ -27,7 +25,6 @@ class List(PolygraphOutputType, PolygraphType, metaclass=TypeBuilderMeta):
         class Type:
             name = "[{}]".format(type_name)
             description = "A list of {}".format(type_name)
-            kind = TypeKind.LIST
             of_type = type_
 
         name = "List__" + type_name

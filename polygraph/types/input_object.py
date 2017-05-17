@@ -1,5 +1,4 @@
 from polygraph.types.basic_type import PolygraphInputType, PolygraphType
-from polygraph.types.definitions import TypeKind
 
 
 class InputValue:
@@ -18,6 +17,4 @@ class InputObject(PolygraphInputType, PolygraphType):
     are either scalars, enums, or other input objects. This allows
     arguments to accept arbitrarily complex structs.
     """
-
-    class Type:
-        kind = TypeKind.INPUT_OBJECT
+    pass

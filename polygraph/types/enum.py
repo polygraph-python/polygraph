@@ -2,12 +2,23 @@ from polygraph.exceptions import PolygraphValueError
 from polygraph.types.basic_type import (
     PolygraphInputType,
     PolygraphOutputType,
-    PolygraphTypeMeta,
 )
-from polygraph.types.definitions import EnumValue, TypeKind
 
 
-class EnumTypeMeta(PolygraphTypeMeta):
+class EnumValue:
+    __slots__ = ["name", "description", "is_deprecated", "deprecation_reason", "parent"]
+
+    def __init__(self, description=None, name=None, deprecation_reason=None):
+        self.name = name
+        self.description = description
+        self.is_deprecated = bool(deprecation_reason)
+        self.deprecation_reason = deprecation_reason
+
+    def __repr__(self):
+        return "EnumValue('{}')".format(self.name)
+
+
+class EnumTypeMeta(type):
     def __new__(cls, name, bases, namespace):
         for key, value in namespace.items():
             if type(value) == EnumValue:
@@ -32,6 +43,3 @@ class EnumType(PolygraphInputType, PolygraphOutputType, metaclass=EnumTypeMeta):
                 "Only values belonging to {} are acceptable".format(cls.__name__)
             )
         return value
-
-    class Type:
-        kind = TypeKind.ENUM
