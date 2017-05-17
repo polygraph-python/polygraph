@@ -1,7 +1,5 @@
 from functools import wraps
 
-from polygraph.types.basic_type import PolygraphTypeMeta
-
 type_builder_registry = {}
 
 
@@ -18,7 +16,7 @@ def type_builder_cache(method):
     return wrapper
 
 
-class TypeBuilderMeta(PolygraphTypeMeta):
+class TypeBuilderMeta(type):
     def __getitem__(self, value):
         try:
             return self.__new__(self, *value)

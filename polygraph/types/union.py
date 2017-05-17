@@ -1,9 +1,7 @@
 from functools import wraps
 
 from polygraph.exceptions import PolygraphSchemaError, PolygraphValueError
-from polygraph.types.api import typedef
 from polygraph.types.basic_type import PolygraphOutputType, PolygraphType
-from polygraph.types.definitions import TypeKind
 from polygraph.types.type_builder import TypeBuilderMeta, type_builder_cache
 from polygraph.utils.deduplicate import deduplicate
 
@@ -40,7 +38,7 @@ class Union(PolygraphOutputType, PolygraphType, metaclass=TypeBuilderMeta):
             message = "All types must be subclasses of PolygraphType. Invalid values: "\
                       "{}".format(", ".join(bad_types))
             raise PolygraphSchemaError(message)
-        type_names = [typedef(t).name for t in types]
+        type_names = [t.__name__ for t in types]
 
         def __new_from_value__(cls, value):
             if not any(isinstance(value, t) for t in types):
@@ -54,7 +52,6 @@ class Union(PolygraphOutputType, PolygraphType, metaclass=TypeBuilderMeta):
             name = "|".join(type_names)
             description = "One of {}".format(", ".join(type_names))
             possible_types = types
-            kind = TypeKind.UNION
 
         name = "Union__" + "_".join(type_names)
         bases = (Union, )

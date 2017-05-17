@@ -2,7 +2,6 @@ from types import SimpleNamespace
 from unittest import TestCase
 
 from polygraph.exceptions import PolygraphValueError
-from polygraph.types.api import typedef
 from polygraph.types.field import field
 from polygraph.types.nonnull import NonNull
 from polygraph.types.object_type import ObjectType
@@ -29,14 +28,6 @@ class HelloWorldObject(ObjectType):
 
 
 class SimpleObjectTypeTest(TestCase):
-    def test_object_type_definition(self):
-        type_info = typedef(HelloWorldObject)
-        self.assertEqual(type_info.name, "HelloWorldObject")
-        self.assertEqual(type_info.description, "This is a test object")
-        self.assertEqual(
-            set([f.name for f in type_info.fields]),
-            set(["greet_world", "greet_you", "bad_resolver"]),
-        )
 
     def test_bare_resolver(self):
         hello_world = HelloWorldObject()
@@ -84,15 +75,6 @@ class ObjectResolverTest(TestCase):
             address=None,
         )
         self.object_type = ObjectResolver(obj)
-
-    def test_method_is_not_automatically_field(self):
-        type_info = typedef(self.object_type)
-        fields = set([f.name for f in type_info.fields])
-        self.assertEqual(
-            fields,
-            set(["name", "age_in_2017", "always_none", "greeting"]),
-        )
-        self.assertNotIn("full_name", fields)
 
     def test_simple_resolver(self):
         self.assertEqual(self.object_type.name(), "John Smith")

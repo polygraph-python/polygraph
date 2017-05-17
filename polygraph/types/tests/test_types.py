@@ -1,41 +1,12 @@
-from unittest import TestCase, skip
+from unittest import TestCase
 
 from polygraph.exceptions import PolygraphValueError
-from polygraph.types.api import typedef
 from polygraph.types.list import List
 from polygraph.types.nonnull import NonNull
-from polygraph.types.scalar import Boolean, Int, String
-from polygraph.utils.trim_docstring import trim_docstring
-
-
-class TypeMetaTest(TestCase):
-    def test_scalar_meta(self):
-        self.assertEqual(typedef(Int).name, "Int")
-        self.assertEqual(typedef(Int).description, trim_docstring(Int.__doc__))
-        self.assertEqual(typedef(String).name, "String")
-        self.assertEqual(typedef(String).description, trim_docstring(String.__doc__))
-        self.assertEqual(typedef(Boolean).name, "Boolean")
-        self.assertEqual(typedef(Boolean).description, trim_docstring(Boolean.__doc__))
-
-    def test_type_string(self):
-        self.assertEqual(str(Int), "Int")
-        self.assertEqual(str(String), "String")
-        self.assertEqual(str(Boolean), "Boolean")
-
-    @skip("Not implemented yet")
-    def test_type_subclass_doesnt_use_docstring_for_description(self):
-        class FancyString(String):
-            """Not the description"""
-            pass
-
-        self.assertEqual(FancyString.__type.name, "String")
-        self.assertNotEqual(FancyString.__type.description, "Not the description")
+from polygraph.types.scalar import Int, String
 
 
 class NonNullTest(TestCase):
-    def test_string(self):
-        self.assertEqual(str(NonNull(String)), "String!")
-        self.assertEqual(str(NonNull(Int)), "Int!")
 
     def test_nonnull_accepts_values(self):
         NonNullString = NonNull(String)
@@ -59,7 +30,6 @@ class ListTest(TestCase):
 
     def test_scalar_list(self):
         int_list = List(Int)
-        self.assertEqual(str(int_list), "[Int]")
         self.assertEqual(int_list([1, 2, 3]), [1, 2, 3])
         self.assertEqual(int_list(None), None)
         with self.assertRaises(ValueError):
@@ -67,7 +37,6 @@ class ListTest(TestCase):
 
     def test_list_of_nonnulls(self):
         string_list = List(NonNull(String))
-        self.assertEqual(str(string_list), "[String!]")
         self.assertEqual(string_list(["a", "b", "c"]), ["a", "b", "c"])
         with self.assertRaises(PolygraphValueError):
             string_list(["a", "b", "c", None])

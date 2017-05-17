@@ -1,21 +1,16 @@
 from polygraph.exceptions import PolygraphSchemaError
-from polygraph.types.api import typedef
-from polygraph.types.definitions import TypeKind
+from polygraph.schema.introspection import TypeKind, type_definition
 from polygraph.types.object_type import ObjectType
 from polygraph.utils.strict_dict import StrictDict
-
-
-def typename(type_):
-    return typedef(type_).name
 
 
 def build_type_map(type_list):
     type_map = StrictDict()
 
     for type_ in type_list:
-        typedef = type_.__type
+        typedef = type_definition(type_)
         kind = typedef.kind
-        type_map[typename(type_)] = type_
+        type_map[typedef.name] = type_
         if kind in (TypeKind.SCALAR, TypeKind.ENUM):
             continue
         elif kind in (TypeKind.LIST, TypeKind.NON_NULL):
@@ -30,7 +25,7 @@ def build_type_map(type_list):
 
         elif kind == TypeKind.OBJECT:
             field_types = []
-            for field in typedef.fields:
+            for field in (typedef.fields or []):
                 field_types.append(field.return_type)
                 field_types.extend(field.arg_types.values() if field.arg_types else [])
             subtype_map = build_type_map(field_types)

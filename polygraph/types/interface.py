@@ -4,6 +4,11 @@ from polygraph.types.field import Field
 
 
 class Interface(PolygraphOutputType, PolygraphType):
+    """
+    GraphQL Interfaces represent a list of named fields and their
+    arguments. GraphQL objects can then implement an interface, which
+    guarantees that they will contain the specified fields.
+    """
     pass
 
 

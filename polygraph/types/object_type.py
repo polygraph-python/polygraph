@@ -1,5 +1,4 @@
 from polygraph.types.basic_type import PolygraphOutputType, PolygraphType
-from polygraph.types.definitions import TypeKind
 
 
 class ObjectType(PolygraphOutputType, PolygraphType, dict):
@@ -10,6 +9,3 @@ class ObjectType(PolygraphOutputType, PolygraphType, dict):
 
     def __init__(self, root=None):
         self.root = root
-
-    class Type:
-        kind = TypeKind.OBJECT
