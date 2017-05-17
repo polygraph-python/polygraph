@@ -84,7 +84,7 @@ def _obtain_field_types(method) -> Tuple[dict, PolygraphOutputType]:
     return arg_types, return_type
 
 
-def field(name=None, deprecation_reason=None):
+def field(func=None, name=None, deprecation_reason=None):
     def inner(method):
         validate_method_annotations(method)
         arg_types, return_type = _obtain_field_types(method)
@@ -106,4 +106,7 @@ def field(name=None, deprecation_reason=None):
             resolver=wrapper,
         )
         return field
-    return inner
+    if func:
+        return inner(func)
+    else:
+        return inner

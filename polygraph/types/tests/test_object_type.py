@@ -12,12 +12,12 @@ class HelloWorldObject(ObjectType):
     """
     This is a test object
     """
-    @field()
+    @field
     def greet_world(self) -> String:
         """Generic message to the world"""
         return "Hello world!"
 
-    @field()
+    @field
     def greet_you(self, your_name: NonNull(String)) -> NonNull(String):
         """Greeting by name"""
         return "Hello, {}!".format(your_name)
@@ -46,19 +46,19 @@ class SimpleObjectTypeTest(TestCase):
 
 
 class ObjectResolver(ObjectType):
-    @field()
+    @field
     def name(self) -> NonNull(String):
         return self.full_name()
 
-    @field()
+    @field
     def age_in_2017(self) -> NonNull(Int):
         return 2017 - self.root.birthyear
 
-    @field()
+    @field
     def always_none(self) -> String:
         return self.root.address
 
-    @field()
+    @field
     def greeting(self) -> HelloWorldObject:
         return HelloWorldObject()
 
