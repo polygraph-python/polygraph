@@ -1,5 +1,5 @@
 from .enum import EnumType, EnumValue
-from .field import field
+from .field import field, Field
 from .input_object import InputObject, InputValue
 from .interface import Interface
 from .lazy_type import LazyType
@@ -14,6 +14,7 @@ __all__ = [
     "EnumType",
     "EnumValue",
     "field",
+    "Field",
     "Float",
     "ID",
     "InputObject",
