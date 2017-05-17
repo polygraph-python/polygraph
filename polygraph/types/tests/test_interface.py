@@ -10,7 +10,7 @@ class InterfaceValidationTest(TestCase):
     def test_valid_interface(self):
 
         class Humanoid(Interface):
-            @field()
+            @field
             def name(self) -> String:
                 pass  # pragma: no cover
 
@@ -27,7 +27,7 @@ class InterfaceValidationTest(TestCase):
     def test_interface_with_duplicate_field_name(self):
 
         class Duplicate(Interface):
-            @field()
+            @field
             def name(self) -> String:
                 pass  # pragma: no cover
 
@@ -41,7 +41,7 @@ class InterfaceValidationTest(TestCase):
     def test_interface_with_invalid_field_name(self):
 
         class DunderscoredField(Interface):
-            @field()
+            @field
             def __name(self) -> String:
                 pass  # pragma: no cover
 

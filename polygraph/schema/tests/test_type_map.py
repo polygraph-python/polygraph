@@ -16,23 +16,23 @@ from polygraph.types import (
 
 
 class Person(ObjectType):
-    @field()
+    @field
     def name(self) -> NonNull(String):
         pass
 
-    @field()
+    @field
     def age(year: Int) -> String:
         pass
 
 
 class Animal(ObjectType):
-    @field()
+    @field
     def can_walk(self) -> Boolean:
         pass
 
 
 class Query(ObjectType):
-    @field()
+    @field
     def characters(self) -> List(Union(Animal, Person)):
         pass
 

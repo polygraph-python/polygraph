@@ -4,20 +4,20 @@ from polygraph.types.scalar import Int, String
 
 
 class Person(ObjectType):
-    @field()
+    @field
     def name(self) -> String:
         pass
 
-    @field()
+    @field
     def age(self) -> Int:
         pass
 
 
 class Animal(ObjectType):
-    @field()
+    @field
     def name(self) -> String:
         pass
 
-    @field()
+    @field
     def sound(self) -> String:
         pass

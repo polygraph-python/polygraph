@@ -10,11 +10,11 @@ class SelfReferentialObject(ObjectType):
     """
     This is a test object
     """
-    @field()
+    @field
     def selfie(self) -> LazyType("SelfReferentialObject"):
         return None
 
-    @field()
+    @field
     def bestie(self) -> LazyType("Person", module_name="polygraph.types.tests.helper"):
         return None
 

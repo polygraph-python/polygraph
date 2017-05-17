@@ -18,13 +18,13 @@ from polygraph.types import (
 
 
 class MockObject(ObjectType):
-    @field()
+    @field
     def field_one(self, value: String) -> Int:
         return 1
 
 
 class OtherObject(ObjectType):
-    @field()
+    @field
     def field_two(self, value: String) -> List[Int]:
         return [1, 2, 3]
 

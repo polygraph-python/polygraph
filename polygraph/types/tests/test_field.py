@@ -21,23 +21,23 @@ class FieldTest(TestCase):
     def test_validate_field_types(self):
 
         class Test(ObjectType):
-            @field()
+            @field
             def valid_field(self, arg1: Int) -> String:
                 pass
 
-            @field()
+            @field
             def also_valid_field(self, arg1: lazy_string) -> lazy_animal:
                 pass
 
-            @field()
+            @field
             def bad_argument_type(self, arg1: Person) -> String:  # ObjectType is not valid input
                 pass
 
-            @field()
+            @field
             def bad_lazy_argument_type(self, arg1: lazy_animal) -> String:
                 pass
 
-            @field()
+            @field
             def bad_return_type(self, arg1: String) -> str:
                 pass
 
