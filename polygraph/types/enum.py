@@ -1,8 +1,5 @@
 from polygraph.exceptions import PolygraphValueError
-from polygraph.types.basic_type import (
-    PolygraphInputType,
-    PolygraphOutputType,
-)
+from polygraph.types.basic_type import PolygraphInputType, PolygraphOutputType
 
 
 class EnumValue:
