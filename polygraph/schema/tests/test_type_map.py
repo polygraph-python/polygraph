@@ -11,28 +11,27 @@ from polygraph.types import (
     ObjectType,
     String,
     Union,
-    field,
 )
 
 
 class Person(ObjectType):
-    @field
+    @ObjectType.field
     def name(self) -> NonNull(String):
         pass
 
-    @field
+    @ObjectType.field
     def age(year: Int) -> String:
         pass
 
 
 class Animal(ObjectType):
-    @field
+    @ObjectType.field
     def can_walk(self) -> Boolean:
         pass
 
 
 class Query(ObjectType):
-    @field
+    @ObjectType.field
     def characters(self) -> List(Union(Animal, Person)):
         pass
 
