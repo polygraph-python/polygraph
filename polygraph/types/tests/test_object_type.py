@@ -2,7 +2,6 @@ from types import SimpleNamespace
 from unittest import TestCase
 
 from polygraph.exceptions import PolygraphValueError
-from polygraph.types.field import field
 from polygraph.types.nonnull import NonNull
 from polygraph.types.object_type import ObjectType
 from polygraph.types.scalar import Int, String
@@ -12,17 +11,17 @@ class HelloWorldObject(ObjectType):
     """
     This is a test object
     """
-    @field
+    @ObjectType.field
     def greet_world(self) -> String:
         """Generic message to the world"""
         return "Hello world!"
 
-    @field
+    @ObjectType.field
     def greet_you(self, your_name: NonNull(String)) -> NonNull(String):
         """Greeting by name"""
         return "Hello, {}!".format(your_name)
 
-    @field(deprecation_reason="Wrong return type")
+    @ObjectType.field(deprecation_reason="Wrong return type")
     def bad_resolver(self) -> Int:
         return "three"
 
@@ -46,19 +45,19 @@ class SimpleObjectTypeTest(TestCase):
 
 
 class ObjectResolver(ObjectType):
-    @field
+    @ObjectType.field
     def name(self) -> NonNull(String):
         return self.full_name()
 
-    @field
+    @ObjectType.field
     def age_in_2017(self) -> NonNull(Int):
         return 2017 - self.root.birthyear
 
-    @field
+    @ObjectType.field
     def always_none(self) -> String:
         return self.root.address
 
-    @field
+    @ObjectType.field
     def greeting(self) -> HelloWorldObject:
         return HelloWorldObject()
 
