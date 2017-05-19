@@ -76,7 +76,7 @@ def _of_type(type_):
     return getattr(_meta(type_), "of_type", None)
 
 
-def type_definition(type_):
+def type_definition(type_) -> TypeDefinition:
     return TypeDefinition(
         kind=_kind(type_),
         name=_name(type_),
