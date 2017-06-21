@@ -18,7 +18,7 @@ install:
 script:
   - isort --diff --check-only -q
   - flake8 .
-  - coverage run -m unittest
+  - coverage run -m pytest
 
 after_success:
   coveralls
