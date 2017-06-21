@@ -1,7 +1,7 @@
 from enum import Enum
+from typing import Iterable
 
 from attr import attrib, attrs
-from typing import Iterable
 
 
 class TypeKind(Enum):

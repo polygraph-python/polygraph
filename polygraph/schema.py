@@ -1,7 +1,7 @@
 from itertools import chain
+from typing import Dict, Iterable, NewType, Union
 
 from attr import attrib, attrs, evolve
-from typing import Dict, Iterable, NewType, Union
 
 from polygraph.types import (
     DeferredType,
