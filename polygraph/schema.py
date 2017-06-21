@@ -61,7 +61,10 @@ def undefer_type(type_: UnresolvedType, type_map: TypeMap) -> PolygraphType:
         return type_
 
 
-def undefer_input_value(input_value: PolygraphInputValue, type_map: TypeMap) -> PolygraphInputValue:
+def undefer_input_value(
+    input_value: PolygraphInputValue,
+    type_map: TypeMap,
+) -> PolygraphInputValue:
     return evolve(
         input_value,
         type_=undefer_type(input_value.type_, type_map),
@@ -87,7 +90,11 @@ def undefer_subtypes(type_: UnresolvedType, type_map: TypeMap) -> PolygraphType:
     )
 
 
-def build_schema(query_type, mutation_type: PolygraphType=None, additional_types: Iterable[PolygraphType]=None) -> Schema:
+def build_schema(
+    query_type,
+    mutation_type: PolygraphType=None,
+    additional_types: Iterable[PolygraphType]=None,
+) -> Schema:
     types = additional_types or []
     types.append(query_type)
     if mutation_type:
