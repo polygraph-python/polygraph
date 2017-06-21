@@ -1,10 +1,14 @@
-class PolygraphValueError(ValueError):
+class PolygraphException(Exception):
     pass
 
 
-class PolygraphTypeError(Exception):
+class PolygraphValueError(PolygraphException):
     pass
 
 
-class PolygraphSchemaError(Exception):
+class PolygraphTypeError(PolygraphException):
+    pass
+
+
+class PolygraphSchemaError(PolygraphException):
     pass
