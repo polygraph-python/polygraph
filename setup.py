@@ -11,7 +11,10 @@ setup(
     license='MIT',
     install_requires=[
         'graphql-core>=1.0.1',
+        'attrs==17.2.0',
     ],
+    setup_requires=['pytest-runner'],
+    tests_require=['pytest'],
     extras_require={
         'dev': [
             'flake8',
@@ -22,12 +25,14 @@ setup(
             'twine==1.8.1',
             'coverage',
             'virtualenvwrapper',
+            'pytest',
         ],
         'test': [
             'isort',
             'flake8',
             'coverage',
             'coveralls',
+            'pytest',
         ]
     }
 )
