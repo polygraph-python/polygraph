@@ -1,4 +1,4 @@
-from polygraph.types import object_type, field, Int, String, TypeKind
+from polygraph.types import Int, String, TypeKind, field, object_type
 
 
 def test_object_type():

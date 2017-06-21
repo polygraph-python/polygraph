@@ -1,4 +1,5 @@
 import pytest
+
 from polygraph.utils.strict_dict import StrictDict
 
 
